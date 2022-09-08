@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: a6399a7f9b685d4448a5b3bc6e592bc1
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - Ping: {fileID: 4179319809759063077, guid: c08994c8c56f6914f8467d36e52a043f, type: 3}
+  - PlayerArea: {instanceID: 0}
+  - EnemyArea: {instanceID: 0}
+  - DropZone: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
