@@ -8,7 +8,8 @@ public class DragDrop : NetworkBehaviour
     // Start is called before the first frame update
     public GameObject Canvas;
     public GameObject DropZone;
-    public PlayerManager PlayerManager; 
+    public PlayerManager PlayerManager;
+    public GameManager GameManager;
 
     private bool isDragging = false;
     private bool isOverDropZone = false;
@@ -20,7 +21,10 @@ public class DragDrop : NetworkBehaviour
     public void Start()
     {
         Canvas = GameObject.Find("Main Canvas");
-        DropZone = GameObject.Find("DropZone");
+        GameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+
+        NetworkIdentity networkIdentity = NetworkClient.connection.identity;
+        PlayerManager = networkIdentity.GetComponent<PlayerManager>();
         if (!hasAuthority)
         {
             isDraggable = false;
@@ -38,8 +42,11 @@ public class DragDrop : NetworkBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        isOverDropZone = true;
-        dropZone = collision.gameObject;
+        if(collision.gameObject == PlayerManager.PlayerSockets[PlayerManager.cardsPlayed])
+        {
+            isOverDropZone = true;
+            dropZone = collision.gameObject;
+        }
     }
 
     private void OnCollisionExit2D(Collision2D collision)
@@ -60,12 +67,10 @@ public class DragDrop : NetworkBehaviour
     {
         if (!isDraggable) return;
         isDragging = false;
-        if (isOverDropZone)
+        if (isOverDropZone && PlayerManager.IsMyTurn)
         {
             transform.SetParent(dropZone.transform, false);
             isDraggable = false;
-            NetworkIdentity networkIdentity = NetworkClient.connection.identity;
-            PlayerManager = networkIdentity.GetComponent<PlayerManager>();
             PlayerManager.PlayCard(gameObject);
         }
         else
