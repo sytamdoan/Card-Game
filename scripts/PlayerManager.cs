@@ -26,7 +26,7 @@ public class PlayerManager : NetworkBehaviour
 
     public int cardsPlayed = 0;
     public bool IsMyTurn = false;
-    List<GameObject> cards = new List<GameObject>();
+    private List<GameObject> cards = new List<GameObject>();
 
     public override void OnStartClient()
     {

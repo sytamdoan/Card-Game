@@ -58,8 +58,8 @@ public class DragDrop : NetworkBehaviour
     public void StartDrag()
     {
         if (!isDraggable) return;
-        startPosition = transform.position;
         startParent = transform.parent.gameObject;
+        startPosition = transform.position;
         isDragging = true;
     }
 
