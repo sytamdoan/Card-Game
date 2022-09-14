@@ -29,12 +29,10 @@ public class DrawCards : NetworkBehaviour
     void InitializeClick()
     {
         PlayerManager.CmdDealCards();
-        PlayerManager.cardsPlayed = 0;
     }
 
     void ExecuteClick()
     {
-        PlayerManager.CmdExecute();
-        PlayerManager.CmdGMChangeState("Initialize {}");
+
     }
 }

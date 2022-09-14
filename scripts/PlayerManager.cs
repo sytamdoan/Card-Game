@@ -19,8 +19,8 @@ public class PlayerManager : NetworkBehaviour
     public GameObject EnemySlot3;
     public GameObject EnemySlot4;
 
-    public GameObject PlayerYard;
-    public GameObject EnemyYard;
+    public GameObject PlayerDrop;
+    public GameObject EnemyDrop;
     public List<GameObject> PlayerSockets = new List<GameObject>();
     public List<GameObject> EnemySockets = new List<GameObject>();
 
@@ -46,8 +46,8 @@ public class PlayerManager : NetworkBehaviour
         EnemySlot3 = GameObject.Find("EnemySlot3");
         EnemySlot4 = GameObject.Find("EnemySlot4");
 
-        PlayerYard = GameObject.Find("PlayerYard");
-        EnemyYard = GameObject.Find("EnemyYard");
+        PlayerDrop = GameObject.Find("PlayerDrop");
+        EnemyDrop = GameObject.Find("EnemyDrop");
 
         PlayerSockets.Add(PlayerSlot1);
         PlayerSockets.Add(PlayerSlot2);
@@ -58,11 +58,11 @@ public class PlayerManager : NetworkBehaviour
         EnemySockets.Add(EnemySlot3);
         EnemySockets.Add(EnemySlot4);
 
-        if (isClientOnly)
+        if(isClientOnly)
         {
             IsMyTurn = true;
         }
-
+   
     }
 
     [Server]
@@ -115,33 +115,13 @@ public class PlayerManager : NetworkBehaviour
         }
         else if (type == "Played")
         {
-            if (cardsPlayed == 5)
-            {
-                cardsPlayed = 0;
-            }
-            if (hasAuthority)
-            {
-                card.transform.SetParent(PlayerSockets[cardsPlayed].transform, false);
-                CmdGMCardPlayed();
-            }
-            card.transform.SetParent(PlayerSlot1.transform, false);
+            card.transform.SetParent(PlayerSlot1.transform,false);
             if (!hasAuthority)
             {
-                card.transform.SetParent(EnemySockets[cardsPlayed].transform, false);
                 card.GetComponent<CardFlipper>().Flip();
             }
-            cardsPlayed++;
-            PlayerManager pm = NetworkClient.connection.identity.GetComponent<PlayerManager>();
-            pm.IsMyTurn = !pm.IsMyTurn;
         }
 
-    }
-
-
-    [Command]
-    public void CmdGMChangeState(string stateRequest)
-    {
-        RpcGMChangeState(stateRequest);
     }
 
     [ClientRpc]
@@ -149,58 +129,4 @@ public class PlayerManager : NetworkBehaviour
     {
         GameManager.ChangeGameState(stateRequest);
     }
-
-    [Command]
-    void CmdGMCardPlayed()
-    {
-        RpcGMCardPlayed();
-    }
-
-    [ClientRpc]
-    void RpcGMCardPlayed()
-    {
-        GameManager.cardPlayed();
-    }
-
-    [Command]
-    public void CmdExecute()
-    {
-        RpcExecute();
-    }
-
-    [ClientRpc]
-    void RpcExecute()
-    {
-        for(int i=0; i < PlayerSockets.Count; i++)
-        {
-            PlayerSockets[i].transform.GetComponentInChildren<cardAbilities>().OnExecute();
-            PlayerSockets[i].transform.GetChild(0).gameObject.transform.SetParent(PlayerYard.transform, false);
-            EnemySockets[i].transform.GetChild(0).gameObject.transform.SetParent(PlayerYard.transform, false);
-        }
-    }
-
-    [Command]
-    public void CmdGMChangeVariables(int variables)
-    {
-        RpcGMChangeVariables(variables);
-    }
-
-    [ClientRpc]
-    public void RpcGMChangeVariables(int variables)
-    {
-        GameManager.ChangeVariables(variables, hasAuthority);
-    }
-
-    [Command]
-    public void CmdGMChangeBP(int playerBP, int opponentBP)
-    {
-        RpcGMChangeBP(playerBP, opponentBP);
-    }
-
-    [ClientRpc]
-    public void RpcGMChangeBP(int playerBP, int opponentBP)
-    {
-        GameManager.ChangeBP(playerBP, opponentBP, hasAuthority);
-    }
 }
-

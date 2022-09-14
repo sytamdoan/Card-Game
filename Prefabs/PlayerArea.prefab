@@ -97,11 +97,11 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 0
-  m_StartCorner: 0
+  m_ChildAlignment: 4
+  m_StartCorner: 3
   m_StartAxis: 0
   m_CellSize: {x: 60, y: 90}
-  m_Spacing: {x: -50, y: 0}
+  m_Spacing: {x: 20, y: 0}
   m_Constraint: 2
   m_ConstraintCount: 1
 --- !u!114 &-1665953176610091011
